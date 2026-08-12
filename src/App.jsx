@@ -5,6 +5,7 @@ import Hero from "./Components/Hero"
 import Categories from "./Components/Categories"
 import RecipeGrid from "./Components/RecipeGrid"
 import RecipeModal from "./Components/RecipeModal"
+import Footer from "./Components/Footer"
 
 function App() {
 
@@ -12,30 +13,31 @@ function App() {
   const [selectedCategory, setSelectedCategory] = useState("All")
 
   const [favorites, setFavorites] = useState(() => {
-    const savedFavorites = localStorage.getItem("recipeFavorites")
-
-    return savedFavorites
-      ? JSON.parse(savedFavorites)
-      : []
+    const saved = localStorage.getItem("recipeFavorites")
+    return saved ? JSON.parse(saved) : []
   })
 
   const [showFavorites, setShowFavorites] = useState(false)
+
   const [selectedRecipe, setSelectedRecipe] = useState(null)
 
-  // Dark Mode
   const [darkMode, setDarkMode] = useState(() => {
     return localStorage.getItem("darkMode") === "true"
   })
 
-  // Save Favorites
+
+  
   useEffect(() => {
+
     localStorage.setItem(
       "recipeFavorites",
       JSON.stringify(favorites)
     )
+
   }, [favorites])
 
-  // Apply Dark Mode
+
+ 
   useEffect(() => {
 
     document.documentElement.classList.toggle(
@@ -50,29 +52,33 @@ function App() {
 
   }, [darkMode])
 
-  // Favorite Add / Remove
+
+  
   const toggleFavorite = (recipe) => {
 
-    setFavorites((currentFavorites) => {
+    setFavorites((current) => {
 
-      const alreadyFavorite = currentFavorites.some(
+      const exists = current.some(
         (item) => item.id === recipe.id
       )
 
-      if (alreadyFavorite) {
+      if (exists) {
 
-        return currentFavorites.filter(
+        return current.filter(
           (item) => item.id !== recipe.id
         )
 
       }
 
-      return [...currentFavorites, recipe]
+      return [...current, recipe]
 
     })
+
   }
 
+
   return (
+
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors duration-300">
 
       <Navbar
@@ -82,15 +88,18 @@ function App() {
         setDarkMode={setDarkMode}
       />
 
+
       <Hero
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
       />
 
+
       <Categories
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
       />
+
 
       <RecipeGrid
         searchTerm={searchTerm}
@@ -101,10 +110,14 @@ function App() {
         setSelectedRecipe={setSelectedRecipe}
       />
 
+
       <RecipeModal
         recipe={selectedRecipe}
         setSelectedRecipe={setSelectedRecipe}
       />
+
+
+      <Footer />
 
     </div>
   )

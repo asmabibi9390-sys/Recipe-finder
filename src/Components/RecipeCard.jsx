@@ -9,11 +9,12 @@ function RecipeCard({
     (item) => item.id === recipe.id
   )
 
+
   return (
 
-    <div className="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-sm dark:shadow-gray-950/50 hover:shadow-xl transition duration-300 group">
+    <div className="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition duration-300 group">
 
-      {/* Image */}
+      
 
       <div className="h-52 overflow-hidden">
 
@@ -26,19 +27,20 @@ function RecipeCard({
       </div>
 
 
-      {/* Content */}
+      
 
       <div className="p-5">
 
-        <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center justify-between gap-3">
 
-          <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+          <h3 className="text-lg font-bold text-gray-900 dark:text-white">
             {recipe.name}
           </h3>
 
+
           <button
             onClick={() => toggleFavorite(recipe)}
-            className="text-2xl hover:scale-110 transition"
+            className="text-2xl hover:scale-110 transition shrink-0"
           >
             {isFavorite ? "❤️" : "♡"}
           </button>
@@ -46,20 +48,21 @@ function RecipeCard({
         </div>
 
 
-        <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
           {recipe.category}
         </p>
 
 
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mt-5">
 
           <span className="text-yellow-500">
             ⭐ {recipe.rating}
           </span>
 
+
           <button
             onClick={() => setSelectedRecipe(recipe)}
-            className="text-orange-500 font-semibold hover:text-orange-600"
+            className="text-orange-500 font-semibold hover:text-orange-600 transition"
           >
             View Recipe →
           </button>
@@ -69,6 +72,7 @@ function RecipeCard({
       </div>
 
     </div>
+
   )
 }
 

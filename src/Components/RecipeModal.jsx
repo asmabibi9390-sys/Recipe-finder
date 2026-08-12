@@ -19,7 +19,7 @@ function RecipeModal({
         onClick={(e) => e.stopPropagation()}
       >
 
-        {/* Image */}
+      
 
         <img
           src={recipe.image}
@@ -30,8 +30,7 @@ function RecipeModal({
 
         <div className="p-6">
 
-          {/* Header */}
-
+        
           <div className="flex justify-between items-start gap-4">
 
             <div>
@@ -61,7 +60,7 @@ function RecipeModal({
           </div>
 
 
-          {/* Ingredients */}
+         
 
           <div className="mt-8">
 
@@ -89,7 +88,7 @@ function RecipeModal({
           </div>
 
 
-          {/* Instructions */}
+        
 
           <div className="mt-8">
 
@@ -104,7 +103,7 @@ function RecipeModal({
           </div>
 
 
-          {/* Close */}
+        
 
           <button
             onClick={() => setSelectedRecipe(null)}

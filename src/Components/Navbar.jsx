@@ -10,8 +10,7 @@ function Navbar({
 
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
 
-        {/* Logo */}
-
+        
         <button
           onClick={() => setShowFavorites(false)}
           className="text-2xl font-bold text-orange-500"
@@ -25,7 +24,7 @@ function Navbar({
 
         <div className="flex items-center gap-3">
 
-          {/* Dark Mode Button */}
+          
 
           <button
             onClick={() => setDarkMode(!darkMode)}
@@ -35,7 +34,7 @@ function Navbar({
           </button>
 
 
-          {/* Favorites Button */}
+          
 
           <button
             onClick={() => setShowFavorites(!showFavorites)}

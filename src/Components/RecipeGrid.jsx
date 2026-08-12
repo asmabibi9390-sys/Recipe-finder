@@ -11,70 +11,89 @@ function RecipeGrid({
 }) {
 
   const [recipes, setRecipes] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
 
 
   useEffect(() => {
 
-    const fetchRecipes = async () => {
+    const searchRecipes = async () => {
 
       try {
 
         setLoading(true)
         setError("")
 
-        const response = await fetch(
-          "https://www.themealdb.com/api/json/v1/1/search.php?s="
-        )
+
+        const query = searchTerm.trim()
+
+
+        const url = query
+          ? `https://www.themealdb.com/api/json/v1/1/search.php?s=${encodeURIComponent(query)}`
+          : "https://www.themealdb.com/api/json/v1/1/search.php?s="
+
+
+        const response = await fetch(url)
+
 
         if (!response.ok) {
-          throw new Error("API Error")
+          throw new Error("Failed to fetch recipes")
         }
+
 
         const data = await response.json()
 
-        const formattedRecipes = (data.meals || []).map(
-          (meal) => ({
 
-            id: meal.idMeal,
+        const meals = data.meals || []
 
-            name: meal.strMeal,
 
-            category: meal.strCategory,
+        const formatted = meals.map((meal) => ({
 
-            rating: "4.8",
+          id: meal.idMeal,
 
-            image: meal.strMealThumb,
+          name: meal.strMeal,
 
-            instructions: meal.strInstructions,
+          category: meal.strCategory,
 
-            ingredients: Array.from(
-              { length: 20 },
-              (_, index) => {
+          image: meal.strMealThumb,
 
-                const ingredient =
-                  meal[`strIngredient${index + 1}`]
+          rating: "4.8",
 
-                const measure =
-                  meal[`strMeasure${index + 1}`]
+          instructions: meal.strInstructions,
 
-                if (!ingredient || !ingredient.trim()) {
-                  return null
-                }
+          ingredients: Array.from(
+            { length: 20 },
+            (_, index) => {
 
-                return `${measure || ""} ${ingredient}`.trim()
+              const ingredient =
+                meal[`strIngredient${index + 1}`]
+
+              const measure =
+                meal[`strMeasure${index + 1}`]
+
+
+              if (
+                !ingredient ||
+                ingredient.trim() === ""
+              ) {
+                return null
               }
-            ).filter(Boolean)
 
-          })
-        )
 
-        setRecipes(formattedRecipes)
+              return `${measure || ""} ${ingredient}`.trim()
 
-      } catch (error) {
+            }
+          ).filter(Boolean)
 
-        console.error(error)
+        }))
+
+
+        setRecipes(formatted)
+
+
+      } catch (err) {
+
+        console.error(err)
 
         setError(
           "Recipes load nahi ho rahi. Internet check karein."
@@ -85,63 +104,73 @@ function RecipeGrid({
         setLoading(false)
 
       }
+
     }
 
-    fetchRecipes()
 
-  }, [])
+    
+    const timer = setTimeout(
+      searchRecipes,
+      400
+    )
 
 
+    return () => clearTimeout(timer)
+
+  }, [searchTerm])
+
+
+  
   const filteredRecipes = recipes.filter((recipe) => {
 
-    const matchesSearch =
-      recipe.name
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase())
-
-    const matchesCategory =
+    const categoryMatch =
       selectedCategory === "All" ||
       recipe.category === selectedCategory
 
-    const matchesFavorites =
+
+    const favoriteMatch =
       !showFavorites ||
       favorites.some(
         (item) => item.id === recipe.id
       )
 
-    return (
-      matchesSearch &&
-      matchesCategory &&
-      matchesFavorites
-    )
+
+    return categoryMatch && favoriteMatch
+
   })
 
 
   return (
 
-    <section className="py-12 bg-gray-50 dark:bg-gray-950 transition-colors duration-300">
+    <section
+      id="recipes"
+      className="py-14 bg-gray-50 dark:bg-gray-950 transition-colors duration-300"
+    >
 
       <div className="max-w-7xl mx-auto px-6">
 
+
+        
         <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
 
           {showFavorites
             ? "My Favorite Recipes ❤️"
-            : "Popular Recipes 🍴"}
+            : searchTerm
+              ? `Search Results 🔍`
+              : "Popular Recipes 🍴"}
 
         </h2>
 
 
-        {/* Loading */}
-
+        
         {loading && (
 
-          <div className="text-center py-20">
+          <div className="flex flex-col items-center justify-center py-20">
 
-            <div className="w-12 h-12 mx-auto border-4 border-orange-200 border-t-orange-500 rounded-full animate-spin"></div>
+            <div className="w-12 h-12 border-4 border-orange-200 border-t-orange-500 rounded-full animate-spin"></div>
 
             <p className="mt-4 text-gray-600 dark:text-gray-300">
-              Loading recipes...
+              Finding your recipe...
             </p>
 
           </div>
@@ -149,21 +178,17 @@ function RecipeGrid({
         )}
 
 
-        {/* Error */}
+        
 
         {!loading && error && (
 
           <div className="text-center py-20">
 
-            <div className="text-5xl mb-4">
+            <div className="text-5xl">
               ⚠️
             </div>
 
-            <h3 className="text-2xl font-bold text-gray-800 dark:text-white">
-              Something went wrong
-            </h3>
-
-            <p className="text-gray-500 dark:text-gray-400 mt-2">
+            <p className="mt-4 text-gray-600 dark:text-gray-300">
               {error}
             </p>
 
@@ -172,13 +197,16 @@ function RecipeGrid({
         )}
 
 
-        {/* Recipes */}
+        
 
         {!loading &&
           !error &&
           filteredRecipes.length > 0 && (
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div
+              key={`${searchTerm}-${selectedCategory}-${showFavorites}`}
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 animate-slide-in"
+            >
 
               {filteredRecipes.map((recipe) => (
 
@@ -197,7 +225,7 @@ function RecipeGrid({
           )}
 
 
-        {/* No Results */}
+        
 
         {!loading &&
           !error &&
@@ -205,16 +233,16 @@ function RecipeGrid({
 
             <div className="text-center py-20">
 
-              <div className="text-5xl mb-4">
-                😕
+              <div className="text-6xl">
+                🔍
               </div>
 
-              <h3 className="text-2xl font-bold text-gray-800 dark:text-white">
-                No recipes found
+              <h3 className="text-2xl font-bold text-gray-800 dark:text-white mt-4">
+                No Recipe Found
               </h3>
 
               <p className="text-gray-500 dark:text-gray-400 mt-2">
-                Try another search or category.
+                Try Pizza, Pasta, Chicken or Burger
               </p>
 
             </div>
@@ -224,6 +252,7 @@ function RecipeGrid({
       </div>
 
     </section>
+
   )
 }
 

@@ -17,8 +17,6 @@ function Hero({
         </p>
 
 
-        {/* Search */}
-
         <div className="mt-8 flex flex-col sm:flex-row gap-3 max-w-2xl mx-auto">
 
           <input
