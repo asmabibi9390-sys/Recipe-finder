@@ -11,7 +11,6 @@ function App() {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("All")
 
- 
   const [favorites, setFavorites] = useState(() => {
     const savedFavorites = localStorage.getItem("recipeFavorites")
 
@@ -21,21 +20,37 @@ function App() {
   })
 
   const [showFavorites, setShowFavorites] = useState(false)
-
   const [selectedRecipe, setSelectedRecipe] = useState(null)
 
+  // Dark Mode
+  const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem("darkMode") === "true"
+  })
 
-  
+  // Save Favorites
   useEffect(() => {
-
     localStorage.setItem(
       "recipeFavorites",
       JSON.stringify(favorites)
     )
-
   }, [favorites])
 
+  // Apply Dark Mode
+  useEffect(() => {
 
+    document.documentElement.classList.toggle(
+      "dark",
+      darkMode
+    )
+
+    localStorage.setItem(
+      "darkMode",
+      darkMode
+    )
+
+  }, [darkMode])
+
+  // Favorite Add / Remove
   const toggleFavorite = (recipe) => {
 
     setFavorites((currentFavorites) => {
@@ -57,13 +72,14 @@ function App() {
     })
   }
 
-
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors duration-300">
 
       <Navbar
         showFavorites={showFavorites}
         setShowFavorites={setShowFavorites}
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
       />
 
       <Hero

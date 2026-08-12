@@ -1,16 +1,23 @@
-function Hero({ searchTerm, setSearchTerm }) {
+function Hero({
+  searchTerm,
+  setSearchTerm
+}) {
+
   return (
-    <section className="bg-orange-50 py-20">
+    <section className="bg-orange-50 dark:bg-gray-900 py-20 transition-colors duration-300">
 
       <div className="max-w-4xl mx-auto px-6 text-center">
 
-        <h2 className="text-4xl md:text-5xl font-bold text-gray-900">
+        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white">
           Discover Delicious Recipes 🍴
-        </h2>
+        </h1>
 
-        <p className="mt-4 text-lg text-gray-600">
+        <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
           Find the perfect recipe for your next meal
         </p>
+
+
+        {/* Search */}
 
         <div className="mt-8 flex flex-col sm:flex-row gap-3 max-w-2xl mx-auto">
 
@@ -19,7 +26,7 @@ function Hero({ searchTerm, setSearchTerm }) {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search for a recipe..."
-            className="flex-1 px-5 py-4 rounded-xl border border-gray-300 bg-white outline-none focus:ring-2 focus:ring-orange-400"
+            className="flex-1 px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 outline-none focus:ring-2 focus:ring-orange-400"
           />
 
           <button

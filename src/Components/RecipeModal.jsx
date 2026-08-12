@@ -1,19 +1,25 @@
-function RecipeModal({ recipe, setSelectedRecipe }) {
+function RecipeModal({
+  recipe,
+  setSelectedRecipe
+}) {
 
   if (!recipe) {
     return null
   }
 
   return (
+
     <div
       className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4"
       onClick={() => setSelectedRecipe(null)}
     >
 
       <div
-        className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
+        className="bg-white dark:bg-gray-900 rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
+
+        {/* Image */}
 
         <img
           src={recipe.image}
@@ -21,17 +27,20 @@ function RecipeModal({ recipe, setSelectedRecipe }) {
           className="w-full h-72 object-cover"
         />
 
+
         <div className="p-6">
+
+          {/* Header */}
 
           <div className="flex justify-between items-start gap-4">
 
             <div>
 
-              <h2 className="text-3xl font-bold text-gray-900">
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
                 {recipe.name}
               </h2>
 
-              <p className="text-gray-500 mt-2">
+              <p className="text-gray-500 dark:text-gray-400 mt-2">
                 {recipe.category}
               </p>
 
@@ -41,52 +50,61 @@ function RecipeModal({ recipe, setSelectedRecipe }) {
 
             </div>
 
+
             <button
               onClick={() => setSelectedRecipe(null)}
-              className="w-10 h-10 rounded-full bg-gray-100 text-gray-600 hover:bg-orange-500 hover:text-white transition text-xl"
+              className="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-orange-500 hover:text-white transition"
             >
               ✕
             </button>
 
           </div>
 
-    
+
+          {/* Ingredients */}
+
           <div className="mt-8">
 
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
               Ingredients 🥗
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
 
-              {recipe.ingredients &&
-                recipe.ingredients.map((ingredient, index) => (
+              {recipe.ingredients?.map(
+                (ingredient, index) => (
 
                   <div
                     key={index}
-                    className="bg-orange-50 rounded-lg px-4 py-3 text-gray-700"
+                    className="bg-orange-50 dark:bg-gray-800 rounded-lg px-4 py-3 text-gray-700 dark:text-gray-300"
                   >
                     🥄 {ingredient}
                   </div>
 
-                ))}
+                )
+              )}
 
             </div>
 
           </div>
 
-          
+
+          {/* Instructions */}
+
           <div className="mt-8">
 
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
               Cooking Instructions 👨‍🍳
             </h3>
 
-            <p className="text-gray-600 leading-8 whitespace-pre-line">
+            <p className="text-gray-600 dark:text-gray-300 leading-8 whitespace-pre-line">
               {recipe.instructions}
             </p>
 
           </div>
+
+
+          {/* Close */}
 
           <button
             onClick={() => setSelectedRecipe(null)}
