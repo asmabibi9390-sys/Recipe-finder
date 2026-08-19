@@ -161,8 +161,7 @@ function RecipeGrid({
 
         </h2>
 
-
-        
+   
         {loading && (
 
           <div className="flex flex-col items-center justify-center py-20">
